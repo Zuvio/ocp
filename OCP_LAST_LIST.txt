@@ -1,0 +1,691 @@
+I/O & NIO.2 METHODS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CONFUSING IO/NIO METHODS
+
+File:
+- String[] list
+- File[] listFiles
+- long length()
+Files:
+- Stream<Path> list(Path)
+- Stream<String> lines(Path)
+- List<String> readAllLines(Path)
+- long size(Path)
+BufferedReader:
+- String readline()
+- void newLine()
+- Stream<String> lines()
+
+
+FILE
+
+1 boolean exists        //true or false
+2 boolean delete        //true if deleted, false otherwise, dir must be empty
+3 boolean mkdir         //make last dir only, true if created, false otherwise
+4 boolean mkdirs        //make all dirs might make some and not all if exception
+5 String getName        //last element
+6 String getParent      //parent String or null
+7 File getParentFile    //parent File or null
+8 long length           //bytes of file, unspecified if dir, 0L if not exists
+9 long lastModified     //(+/-)millis since epoch or 0L if not found or IO error
+10 boolean renameTo(File)//true if renamed, false otherwise
+11 String getAbsolutePath//same as toAbsolutePath (rel + current dir)
+12 File getAbsoluteFile  //make File of getAbsolutePath
+13 boolean isAbsolute    //only true if file has a prefix
+14 String[] list         //string names of files in this dir, not a dir = null
+15 File[] listFiles      //file[] or files in this dir, not a dir or IO err = null
+16 boolean isFile
+17 boolean isDirectory
+
+Path
+
+String toString
+int getNameCount()
+Path getName(int)
+Path getFileName()
+Path getParent()
+Path getRoot()
+Path subPath(in,ex)
+boolean isAbsolute()
+Path toAbsolutePath()
+Path resolve(path)
+Path resolve(string)
+Path resolveSibling(path)
+Path resolveSibling(string)
+Path relativize(Path)
+Path normalize()
+Path toRealPath throws IOException and only Path to support NOFOLLOW_LINKS
+   toRealPath = normalize + toAbsolutePath
+Uri toUri()
+File toFile()
+
+FILES
+
+1 boolean exists(Path,options): no exception just true or false!
+2 boolean isSameFile(Path1,Path2):
+   - checks if Path point to the same file or dir on the file system
+   - first checks Paths with equals() and can return true, period
+   - follows links by default
+   - resolves Path symbols
+   - exception if either file doesnt exist, no more equals() !
+   - only true if both paths resolve to the same File or not
+3 Path createDirectory(Path,attributes):
+   - exception if dir exists
+   - exception if dir cant be created
+   - exception if any parent does not exist
+   - optional FileAttributes param to set attribs
+4 Path createDirectories(Path,attributes):
+   - exception if dir exists
+   - exception if dir cant be created
+   - parents are created as needed
+   - optional FileAttributes param to set attribs
+5 Path copy(Path,Path,options):
+   - exception if file or dir doesnt exist
+   - exception if file or dir cant be read
+   - shallow copy meaning a dir is copied but not its contents
+   - follows links by default meaning if path1 is link, final target is copied
+   - does not overwrite existing file
+   - does not copy attributes by default
+   - last three points can be overwritten with options
+6 Path copy(InputStream,Path, varargs...):
+   - optional varargs because you copy to file
+7 Path copy(Path,OutputStream):
+   - no varargs because source might not be file system resource!!
+8 Path move(Path,Path);
+   - exception if file or dir cant be found
+   - exception if file or dir cant be moved
+   - on rename dir, keep contents
+   - follows links by default
+   - does not overwrite existing file
+   - does not move atomically by default
+   - last three points can be overwritten with options
+   - if atomic move is not supported: AtomicMoveNotSupportedException
+   - if moving non-empty file between drives: DirectoryNotEmptyException
+9 void delete(Path)
+   - if dir not empty: DirectoryNotEmptyException
+   - if file not found: NoSuchFileException
+   - if target is symbolic link the link itself will be deleted
+10 boolean deleteIfExists(Path):
+   - false if file or dir does not exist 
+   - exception if dir is not empty or other reason for failure
+11 BufferedReader newBufferedReader(Path,Charset):
+   - reads file from Path into BufferedReader object
+   - requires charset to determine encoding
+12 BufferedWriter newBufferedWriter(Path,Charset)
+   - writes to a file at Path using BufferedWriter
+   - requires charset to determine encoding
+   - creates new file or overwrites existing
+13 List<String> readAllLines(Path):
+   - reads all lines of text from Path file
+   - returns List<String> (NO STREAM OPERATIONS!!!!)
+   - overload for optional Charset
+   - exception if file can not be read
+   - if file is large you may get OutOfMemoryError
+14 Stream<Path> walk(Path):
+   - returns a Stream<Path>
+   - depth-first
+   - max depth is Integer.MAX_VALUE
+   - does not follow symbolic links by default because unrelated dirs
+15 Stream<Path> walk(Path,int):
+   - overloaded method with int for custom depth
+   - 0 is only current level
+   - 1 or higher to go down levels
+16 Stream<Path> walk(Path,int,options):
+   - use this overload when you want to FOLLOW_LINKS
+   - walk will now track visited Paths
+   - if cycle is detected throw FileSystemLoopException
+17 Stream<Path> find(Path,int,BiPredicate):
+   - returns a Stream<Path>
+   - behaves like walk() but requires depth int always
+   - does not follow links unless FOLLOW_LINK is added
+18 Stream<Path> list(Path):
+   - returns a Stream<Path>
+   - unlike walk() only gets 1 level
+   - is like File.listFiles
+19 Stream<String> lines(Path):
+   - returns Stream<String> 
+   - lazy processing
+   - overloaded version with charset
+
+FILES ATTRIBUTE METHODS
+
+1 boolean isDirectory(Path):
+   - if file or link pointing to file is a Dir true else false
+   - does not throw exception
+2 boolean isRegularFile(Path):
+   - if file or link pointing to file is a regular file true else false
+   - regular file has content and is not a link,dir, resource etc
+   - does not throw exception
+3 boolean isSymbolicLink(Path):
+   - if target is link true regardless whether link target exists
+   - does not throw exception
+4 boolean isReadable(Path):
+   - does not throw exception
+5 boolean isExecutable(Path):
+   - what is executable depends on file system
+   - does not throw exception
+6 boolean isHidden(Path):
+   - start with . on linux and is attribute on windows
+   - throws IOException because you need to read info to determine
+7 long size(Path):
+   - conceptual size not actual storage size on system
+   - throws IOException because you need to read info to determine
+   - only for files, on dir is system dependent and undefined!!!
+8 FileTime getLastModifiedTime(Path):
+   - return FileTime toMillis() -> epoch time
+   - throws IOException because you need to read info to determine
+9 Path setLastModifiedTime(Path,FileTime):
+   - return FileTime fromMillis() -> epoch time
+   - throws IOException because you need to read info to determine
+10 UserPrincipal getOwner(Path, linkoptions):
+   - return UserPrincipal has getName() method
+   - throws IOException because you need to read info to determine
+11 Path setOwner(Path,UserPrincipal):
+   - throws IOException because you need to read info to determine
+12 getUserPrincipalLookupService:
+   - used to get an arbitrary user
+   - FileSystems.getDefault() OR
+   - path.getFileSystem()
+   - .getUserPrincipalLookupService().lookupPrincipalByName("jane")
+13 BasicFileAttributes readAttributes(Path,Class<A>) OR view.readAttributes():
+   - throws IOException when view class type is unsupported
+   - UnsupportedOperationException for example
+14 FileAttributeView getFileAttributeView(Path,Class<V>)
+   - throws IOException when view class type is unsupported
+15 createTime()
+16 FileTime getLastModifiedTime(Path)
+17 lastAccessTime()
+18 isOther():
+   - used to check paths that are not file, dir or link like resources
+19 fileKey():
+   - returns unique file system id or null if not supported by fs
+20 setTimes(FileTime lastModifiedTime, lastAccessTime, createTime):
+   - MAC -> Modified Access Create
+   - all FileTime types, so supply method with FileTime objects!!!
+   - throws IOException
+
+
+COLLECTION METHODS
+1 boolean add(E)
+2 boolean remove(Object)
+3 int size()
+4 boolean isEmpty()
+5 void clear()
+6 boolean contains(Object)
+7 void forEach(Consumer)
+8 boolean removeIf(Predicate)
+
+LIST METHODS
+1 void add(int,E)
+2 E remove(int)
+3 E get(int)
+4 E set(int)
+5 int indexOf(Object)
+6 int lastIndexOf(Object)
+7 void replaceAll(UnaryOperator)
+
+QUEUE METHODS (FOCUS ON RETURN TYPES)
+1 boolean add(E)  true or exception
+2 boolean offer(E)true or false
+3 E element()     E or exception
+4 E peek()        E or null
+5 E remove()      E or exception
+6 E poll()        E or null
+7 E pop()         E or exception
+8 void push(E)    exceptions
+
+
+MAP METHODS
+
+1  V        put(K key, V value)         
+   //return null or previous value
+2  V        putIfAbsent(K key, V value) 
+   //return null or existing value
+3  V        remove(Object key)          
+   //return value or null
+4  V        get(Object key)          
+   //return value or null
+5  V        getOrDefault(Object key) 
+   //return value or default
+6  V        merge(K k, V v, BiFunction(<V, V, V> func))
+7  V        replace(K key, V value) 
+   //return previous value or null
+8  void     replaceAll(BiFunction<K, V, V> func)
+9  boolean  isEmpty()
+10 int      size()   
+11 void     clear()
+12 Set<Map.Entry<K,V>>  entrySet()
+13 Set<K>               keySet()
+14 Collection<V>        values()
+15 boolean  containsKey(Object key)
+16 boolean  containsValue(Object value)
+17 void     forEach(BiConsumer(K k, V v))
+
+STREAM CLASSES YOU NEED TO KNOW AND FIGURE OUT BY THEIR NAME
+
+
+1  FileInputStream      //bytes
+2  FileOutputStream
+3  FileReader           //characters
+4  FileWriter
+5  BufferedInputStream  //buffers to improve efficiency and perf
+6  BufferedOutputStream
+7  BufferedReader
+8  BufferedWriter
+9  ObjectInputStream    //deserializes primitives to inputstream
+10 ObjectOutputStream   //serializes primitives to outputstream
+11 PrintStream //writes and formats java objects to binary stream
+12 PrintWriter //writes and formats java objects to char stream
+13 InputStreamReader    //read  char data from existing outputstream
+14 OutputStreamWriter   //write char data to   existing outputstream
+
+
+THE THREE COMPUTE METHODS OF MAP AND MERGE
+
+map.merge(K,V,BiFunction)
+look for key
+key not found, dont use BiFunction, add key-value
+key found but null value, dont use BiFunction, add key-value
+key found with value -> BiFunction(new+old values) == null ? remove key 
+key found with value -> BiFunction(new+old values) != null ? replace value
+
+map.compute(K,BiFunction)
+look for key
+key not found, skip
+key found with value or null -> BiFunction == null ? remove value or keep null
+key found with value or null -> BiFunction == excp ? rethrow and keep value as is
+return new value for key or null if none
+String msg ="hi"; map.compute(key, (k, v) -> (v == null) ? msg : v.concat(msg))
+
+map.computeIfPresent(K, BiFunction)
+if key found with non-null value -> BiFunction == null ? remove value
+if key found with non-null value -> BiFunction == excp ? rethrow and keep value 
+return new value or null if none
+
+map.computeIfAbsent(K, Function)
+look for key
+key not found, skip
+key found with value, skip
+key found without value -> Function == null ? keep value at null
+key found without value -> Function == excp ? rethrow and keep value as is
+return existing (=present) or computed value or null if computed value is null
+
+
+COLLECTORS STATIC METHODS TO USE WITH COLLECT() - MATHY METHODS
+
+
+Double                     averagingDouble(ToDoubleFunction f)
+Double                     averagingInt(ToIntFunction f)
+Double                     averagingLong(ToLongFunction f)
+
+Double                     summingDouble(ToDoubleFunction f)
+Integer                    summingInt(ToIntFunction f)
+Long                       summingLong(ToLongFunctionf)
+
+DoubleSummaryStatistics    summarizingDouble(ToDoubleFunction f)
+IntSummaryStatistics       summarizingInt(ToIntFunction f)
+LongSummaryStatistics      summarizingLong(ToLongFunction f)
+
+Long                       counting()
+
+
+COLLECTORS STATIC METHODS TO USE WITH COLLECT() - MAPPY METHODS
+
+
+Map<K, List<T>>         groupingBy(Function f)
+Map<K, List<T>>         groupingBy(Function f,Collector dc)
+Map<K, List<T>>         groupingBy(Function f,Supplier s,Collector dc)
+
+Map<Boolean,List<T>>    partitioningBy(Predicate p)
+Map<Boolean,List<T>>    partitioningBy(Predicate p,Collector dc)
+
+Collector               mapping(Function f,Collector dc)
+
+Map toMap(Function k, Function v)
+Map toMap(Function k, Function v, BinaryOperator m)
+Map toMap(Function k, Function v, BinaryOperator m, Supplier s)
+
+
+COLLECTORS STATIC METHODS TO USE WITH COLLECT() - OTHER METHODS
+
+
+String         joining()                //turn Elements into 1 String
+String         joining(CharSequence delimiter) //use cs as delimiter for String
+String         joining(CharSequences: delimiter, prefix, suffix)
+
+Optional<T>    maxBy(Comparator c)
+Optional<T>    minBy(Comparator c)
+
+List           toList()
+Set            toSet()
+Collection     toCollection(Supplier s)
+
+
+CONSOLE CONSTRUCTOR
+
+System.console()
+
+CONSOLE METHODS
+
+System.console()
+   - reader
+   - writer
+   - format
+   - flush()
+   - printf()
+   - readLine
+   - readLine(String fmt, Object... args)
+   - readPassword()
+   - readPassword(String fmt, Object... args)
+
+
+PRINTWRITER & PRINTSTREAM METHODS (+ RETURNTYPES)
+
+print()   void
+println() void
+printf() {return (PrintWriter/PrintStream) format( (Locale,) String, Object...)}
+format( (Locale,) String, Object...)
+
+PRINTSTREAM CLASSES CONSTRUCTORS
+
+public PrintStream(OutputStream out)
+public PrintStream(File file)       throws FileNotFoundException
+public PrintStream(String fileName) throws FileNotFoundException
+public PrintWriter(Writer out)
+public PrintWriter(OutputStream out) !! unique constructor combo!!
+public PrintWriter(File file)       throws FileNotFoundException
+public PrintWriter(String fileName) throws FileNotFoundException
+
+STREAM I/O METHODS         
+
+public   int    read()            throws IOException
+public   int    read(byte[] b)    throws IOException
+public   int    read(char[] c)    throws IOException
+public   int    read(byte[] b, int offset, int length)    throws IOException
+public   int    read(char[] c, int offset, int length)    throws IOException
+public   void   write(int b)      throws IOException
+public   void   write(byte[] b)   throws IOException
+public   void   write(char[] c)   throws IOException
+public   void   write(byte[] b, int offset, int length)   throws IOException
+public   void   write(char[] c, int offset, int length)   throws IOException
+public   void   write(String)     throws IOException
+public   void   close()  
+public   Writer append(charsequence) throws IOException
+
+
+MANIPULATING STREAM METHODS         
+public   boolean  markSupported()   
+public   void  mark(int readLimit)  
+public   void  reset()  throws IOException
+public   long  skip(long n)   throws IOException
+
+OPTIONAL METHODS
+
+
+1 get() = get value or throw exception
+2 ifPresent(Consumer) = use value if present or nothing
+3 isPresent() = check for value return true or false
+4 orElse(T other) = returns value if present, otherwise return other 
+5 orElseGet(Supplier) = return value, or invoke supp with other T
+6 orElseThrow() = throw NoSuchElementException
+7 orElseThrow(Supplier)   (() -> new IllegalStateException) 
+
+Optional.of(null) = 
+
+nullpointerexception
+
+Optional.empty().get() = 
+
+nosuchelementexception
+
+STREAM FACTORY + FINITE & INFINITE EXAMPLES
+
+
+1 Stream.empty();
+2 Stream.of(varargs);
+3 coll.stream();
+4 coll.parallelStream();
+5 Stream.generate(supplier)
+6 Stream.iterate(seed, unaryOperator)
+7 Stream.iterate(seed, predicate, unaryOperator
+19: Stream<Integer> oddNumberUnder100 = Stream.iterate(
+20:    1,                // seed
+21:    n -> n < 100,     // Predicate to specify when done
+22:    n -> n + 2);      // UnaryOperator to get next value from prev
+
+TERMINAL STREAM OPERATIONS
+
+
+1 long         count()
+2 Optional<T>  min(Comparator<? super T> comparator);
+3 Optional<T>  max(Comparator<? super T> comparator);
+4 Optional<T>  findAny()
+5 Optional<T>  findFirst()
+6 boolean      anyMatch(Predicate <? super T> predicate)
+7 boolean      allMatch(Predicate <? super T> predicate)
+8 boolean      noneMatch(Predicate <? super T> predicate)
+9 void         forEach(Consumer<? super T> action)
+10 Optional<T> reduce(BinaryOperator<T> accumulator)
+11 T           reduce(T identity, BinaryOperator<T> accumulator)
+12 <U> U       reduce(U identity, 
+                      BiFunction<U,? super T,U> accumulator,  
+                      BinaryOperator<U> combiner)
+13 <R> R       collect(Supplier<R> supplier,
+                       BiConsumer<R, ? super T> accumulator,
+                       BiConsumer<R, R> combiner)
+14 <R,A> R     collect(Collector<? super T, A,R> collector)
+
+
+LEARN THESE FUNCTIONAL INTERFACES:
+
+Optional<T> reduce(   BinaryOperator)
+T           reduce(T, BinaryOperator)
+U           reduce(U, BiFunction, BinaryOperator)
+<R> R       collect(Supplier, BiConsumer, BiConsumer)
+<R,A> R     collect(Collectors)
+
+COMMON INTERMEDIATE STREAM OPERATIONS
+
+ 
+1     Stream<T> filter(Predicate)
+2     Stream<T> distinct()             //calls equals on ALL objects
+3     Stream<T> limit(long maxSize)
+4     Stream<T> skip(long n)   
+5 <R> Stream<R> map(Function<T,R>)
+6 <R> Stream<R> flatMap(Function<T,Stream<R>>)   
+7     Stream<T> sorted()               //in natural order
+8     Stream<T> sorted(Comparator)
+9     Stream<T> peek(Consumer)         //returns original stream, 
+                                       but you can alter it!
+
+PRIMITIVE STREAM METHODS
+
+
+1 all the Stream<T> methods
+2 Stream<T>                         boxed()
+3 OptionalDouble                    average()
+4 OptionalInt/Long/Double           max()
+5 OptionalInt/Long/Double           min()
+6 int/long/double                   sum()
+7 Int/Long/DoubleStatisticsSummary  summaryStatistics()
+8 Int/LongStream                    range(int/long a, int/long b)
+9 Int/LongStream                    rangeClosed(int/long a, i/l b)
+
+IntStream: OptionalInt reduce(IntBinaryOperator)
+IntStream:         int reduce(int, IntBinaryOperator)
+
+
+STREAM MAPPING METHODS
+
+
+same Stream to same Stream
+
+= map()
+
+Double/Int/Long to Stream<T>
+
+= mapToObj()
+
+Any other mapping streams
+
+= mapToDouble()
+mapToInt()
+mapToLong()
+flatMapToDouble()
+flatMapToInt()
+flatMapToLong()
+
+STREAM MAPPING FUNCTIONS AS THE MAPPING PARAMETER
+
+
+Stream to Stream
+
+= Function
+
+Stream to Double/Int/Long
+
+= ToDoubleFunction ToIntFunction ToLongFunction
+
+Double/Int/Long to Stream
+
+= DoubleFunction IntFunction LongFunction
+
+Int/Long/Double to itself
+
+= Int/Long/DoubleUnaryOperator
+
+Int/Long/Double to Int/Long/Double
+
+= TypeToTypeFunction LongToIntFunction DoubleToLongFunction etc
+
+
+SUMMARYSTATISTICS METHODS
+
+
+IntSummaryStatistics stats = ints.summaryStatistics();
+stats.getMin()          //value or empty Optional
+stats.getMax()          //value or empty Optional
+stats.getAverage()      //value or empty Optional
+stats.getSum()          //value or 0
+stats.getCount()        //value or 0
+
+FUNCTIONAL INTERFACES FOR PRIMITIVES
+
+
+Easy stuff to remember:
+- remember the base FI list
+- prefix those FIs with the primitive type
+- Boolean only has a Supplier version
+- no more generics, only Function<R> still has one
+- return is no longer <T> but the primitive of the FI, except Function
+- consumer, predicate and function do not change SAM name, rest does
+- unary + binary also change SAM name
+- No Bi-versions because not used as much
+
+
+BooleanSupplier            boolean  getAsBoolean()
+
+DoubleSupplier             double      getAsDouble()
+IntSupplier                int         getAsInt()
+LongSupplier               long        getAsLong()
+
+DoubleConsumer             void        accept(double)
+IntConsumer                void        accept(int)
+LongConsumer               void        accept(long)
+
+DoublePredicate            boolean     test(double)
+IntPredicate               boolean     test(int)
+LongPredicate              boolean     test(long)
+
+DoubleFunction<R>          R           apply(double)
+IntFunction<R>             R           apply(int)
+LongFunction<R>            R           apply(long)
+
+DoubleUnaryOperator        double      applyAsDouble(double)
+IntUnaryOperator           int         applyAsInt(int)
+LongUnaryOperator          long        applyAsLong(long)
+
+DoubleBinaryOperator       double      applyAsDouble(double, double)
+IntBinaryOperator          int         applyAsInt(int, int)
+LongBinaryOperator         long        applyAsLong(long, long)
+
+
+RESOURCEBUNDLE METHODS
+
+Object getObject(String)
+String getString(String)        => (String) getObject(String)
+String[] getStringArray(String) => looks in file + parents for values of key
+Set<String> keySet()
+boolean containsKey(String key)
+
+throws MissingResourceException if no resource was found in the files
+only supply STRINGS to these methods

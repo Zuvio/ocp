@@ -1,0 +1,1928 @@
+OCP EXAM QUESTIONS REVIEW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*********************************************************************************
+INNER CLASSES
+*********************************************************************************
+
+Remember: 
+- A nested class is any class whose declaration occurs 
+
+within the body of another class or interface. 
+
+- A top level class is a class that is 
+
+not a nested class. 
+
+- An inner class is a nested class that is not 
+
+explicitly or implicitly declared static. 
+
+- A class defined inside an interface is 
+
+implicitly static.
+
+Q: Anonymous inner classes always extend directly from the Object class?
+
+false
+
+When you create an anonymous class for an interface, it extends from 
+
+Object.
+
+But if you make an anonymous class from another class then it extends 
+
+that class. 
+
+Q: What classes can a non-static nested class extend ?
+
+any class
+
+Q: A local/anonymous class can be declared in a static method?
+
+true, but it does affect what that class can access from outer
+
+Q: The modifier static pertains only to 
+
+member classes, not to 
+
+top level or local or anonymous classes.
+
+Q: A static nested interface can contain static member variables?
+
+true
+
+Q: Static nested interface is similar to 
+
+top level interface.
+
+Q: For each instance of the outer class, there can exist many instances of a 
+non-static inner class?
+
+true
+
+Q: A non static inner class may have static and/or final members.
+
+Yes, final is always allowed but static has to be final
+
+Q: A non static inner class may have static methods.
+
+No!
+
+Q: Anonymous inner classes can never have initialization parameters.
+
+False, they can if they are for classes to fill out the constructor.
+class AbstractClass { AbstractClass(int start) } new AbstractClass(10) { }
+
+Q: A static nested class can contain a non - static inner class.
+
+true
+
+Q: All nested classes can be declared static.
+
+true
+
+Q: Anonymous classes cannot define constructors explicitly in Java code.
+
+Anonymous classes cannot have explicitly defined constructors, since they have no 
+names.
+
+
+Q+A:
+Which variables declared in the encapsulating class or in the method, can an 
+inner class access if the inner class is defined in an instance method of the 
+encapsulating class?
+
+1 All static variables 
+2 All final instance variables
+3 All instance variables 
+4 All automatic variables
+5 All final and effectively final automatic variables
+
+not 4
+
+Q+A:
+Which variables declared in the encapsulating class or in the method, can an 
+inner class access if the inner class is defined in a static method of 
+encapsulating 
+class?
+
+1 All static variables 
+2 All final instance variables
+3 All instance variables
+4 All automatic variables
+5 All final or effectively final static or automatic variables
+
+only 1 and 5: static can not reference non-statics
+
+Q+A: can an outer class access private fields of its inner private class?
+
+yes, a private inner class with private fields is always accessible in outer
+
+Q: inner and outer class syntax for accessing variables
+public class Nesting { public static void main(String args[]) {         
+   B.C obj = new B( ).new C( ); }} 
+class A { char c; A(char c) { this.c = c; }} 
+class B extends A { char c = 'a'; B( ) { super('b'); } 
+   class C extends A { char c = 'c'; C( ) { super('d');
+      System.out.println(A.this.c);
+      System.out.println(B.this.c);
+      System.out.println(C.this.c);
+      System.out.println(this.c);
+      System.out.println(super.c);
+      System.out.println(c); 
+}}}
+
+Q:     
+public class Outer { int i = 10;
+   class Inner { public void methodA() { //line 1. } } 
+}
+
+In Inner object, will this work?
+1 System.out.println(Outer.this.i);
+2 System.out.println(i);
+3 System.out.println(this.i);
+
+1 yes because i exists in outer which is referenced with Outer.this
+2 yes because outer variables are directly available in Inner
+3 no because inner does not know i and with this.i you reference i from inner
+
+
+Q: good or bad code?
+new ComplexInterface() {//valid code }
+new ComplexInterface(x) {//valid code }
+
+2nd is bad because you can not pass arguments when you implement an interface
+
+Q: what modifier does a default no-args inner constructor get
+
+A: Same as the inner class!
+protected class Inner { } will produce a protected inner(){}; constructor.
+
+Q: how to create an instance of a static nested class?
+
+new OuterClass().Inner() from any class if they are public
+
+in the same package with
+
+OuterClass.Inner = new Inner() if it has been statically imported as 
+
+import (static) OuterClass.Inner;
+
+Q: SYNTAX EXERCISE!
+class Outsider { public class Insider{ } } 
+public class TestClass { public static void main(String[] args) {        
+   Outsider os = new Outsider();        
+   // 1 insert line here     } }
+
+Insider in = os.new Insider(); ?
+
+TestClass does not know Insider directly since no import <package>.Outsider.*;
+
+os.Insider in = os.new Insider(); ?
+
+Good syntax but here os. is the packagename and that does not exist.
+
+Insider in = Outsider.new Insider(); ?
+
+TestClass does not know Insider directly since no import <package>.Outsider.*;
+Also, Outsider.new Insider() is wrong because even if Insider were static, it
+would have to be new Outsider.Insider() just like new Locale().Builder()
+
+Outsider.Insider in = os.new Insider(); ?
+
+correct!
+
+Q: is the semicolon required when declaring an inner class?
+
+no, it is not required and you can place it without any effect
+
+*********************************************************************************
+I/O CHARACTER AND BINARY STREAMS
+*********************************************************************************
+Q: with java.io if a file doesnt exist what happens?
+
+A: stuff like new FileWriter("hi.txt").write("whatever") will 
+
+create the file if it doesnt exist and write in it
+
+if the file already exists it will
+
+overwrite it unless
+
+you supplied the append() flag
+
+Will a file be created even if you dont write to it?
+
+yes it will!
+
+Q: p1.relativize("c:\\temp\\text2.txt"); what happens?
+
+IllegalArgumentException because relativize works on Paths not Strings
+
+Q: p1.resolveSibling("text2.txt"); what does it do?
+
+Get the absolute path for a file that exists in the same directory as the 
+original file.
+Path 1 = c:\\temp\\test1.txt //test2.txt is also here!
+path 2 = p1.resolveSibling("text2.txt");
+resolveSibling(String or Path)
+
+Q: which one is correct and why?
+pw.printf(text).print("success");
+pw.println(text).println("success");
+
+println returns void so you cant chain to it
+printf returns the PrintWriter object so you can chain it
+
+if(pw.checkError()) System.out.println("exception in writing");
+Note that none of the PrintWriter's methods throw any I/O exceptions because 
+they supress the errors in writing and set an internal flag for error status 
+instead. The checkError method returns true if there has been a problem in 
+writing.
+
+
+*********************************************************************************
+INHERITANCE
+*********************************************************************************
+Q: when are private accessible?
+class Book { int pages = 100; }
+class Novel extends Book { private int pages = 200; }
+TestClass {
+   psvm {
+      Book o1 = new Book();
+      Book o2 = new Novel();
+      Novel o3 = new Novel();
+      sout(o1.pages); //1
+      sout(o2.pages); //2
+      sout(o3.pages); //3
+      sout(((Novel)o2).pages); //4
+      sout(((Book)o3).pages);  //5
+   }
+}
+
+//1 is fine, Book has pages and is default
+//2 is fine, Book has pages and is default, for variables you use ref class
+//3 is not fine! Novel has pages but is private and you are not in Novel class
+//4 is not fine! you want to use Novel's pages but see //3
+//5 is fine, because Novel has pages but is private, but you cast to superclass
+Book which also has pages which is default
+
+
+
+*********************************************************************************
+EXCEPTIONS
+*********************************************************************************
+SQLException
+ParseException
+
+IOException (package java.io:)
+|_FileNotFoundException
+|_NoSuchFileException
+|_AccessDeniedException
+
+IOException (package java.nio:)
+|_NoSuchFileException
+|_DirectoryNotEmptyException
+
+ClassNotFoundException
+NoSuchFieldException
+
+Q: During try-with-resources opening resources, an exception gets thrown 
+during resource 2. What happens in the program?
+note: close() throws a RuntimeException("blabla");
+try(Device d1 = new Device("D1");   //opens resource succesfully
+    Device d2 = new Device("D2")) { //throws IOException during constructor!
+      throw new Exception("test");   
+}
+
+IOException thrown during opening resource, do you execute try {} block?
+
+No! You do not execute throw new Exception("test"); in this case, meaning
+it will not be a suppressed exception!
+
+Will you run the implicit finally block?
+
+Yes! One resource has been opened and that resource will be properly closed.
+
+Meaning?
+
+On close() the RTE will be added as a suppressed exception to the IOException.
+
+D1 Opened 
+Closing device D1 Exception in thread "main" java.io.IOException: Unknown 
+   at trywithresources.Device.<init>(Device.java:9)
+   at trywithresources.Device.main(Device.java:24)
+   Suppressed: java.lang.RuntimeException: RTE while closing D1
+      at trywithresources.Device.close(Device.java:19) 
+      at trywithresources.Device.main(Device.java:26) 
+Java Result: 1
+
+Q: what are these: ClassNotFoundException, NoSuchFieldException
+
+checked exceptions .... might show up
+
+Q: Are try-with-resources accessible in the catch or finally block?
+
+No, they are closed at the end of the try block
+
+Q: where is AutoCloseable located and what does it throw?
+
+java.lang.AutoCloseable's close() throws Exception 
+
+Q: where is Closeable located and what does it throw?
+
+java.io.Closeable's close() throws IOException.
+
+Q: try (os = newResource("txt.txt")) { os = new Resouce(); }
+Problem?
+
+TRY-WITH-RESOURCES ARE EFFECTIVELY FINAL
+YOU CANT RE-ASSIGN THEM JUST LIKE
+MULTICATCH E
+LAMBDA VARS
+LOCAL CLASS VARS
+
+Q: if you close a try-with-resources twice, what happens?
+
+nothing, close is executed twice and does what it says it will do!
+Device Opened 
+Writing : TEST 
+Device closed 
+Device closed
+
+
+
+*********************************************************************************
+SERIALIZATION
+*********************************************************************************
+Q: Multiple copies of an object may be added to a stream?
+
+true, you can have multiple copies of an object
+
+Q: For a class to be serializable, that class and each of its super classes must 
+implement Serializable interface?
+
+False! Also remember that if a super class declares that it implements 
+serializable, all its subclasses 
+
+automatically become serializable.
+
+Q: To customize the behavior of class serialization, the readObject and 
+writeObject methods should be implemented.
+
+yes, you can give these a custom implementation but what is a requirement?
+
+only IF you make them private
+
+Q: which fields will retain their value after seri and deseri in different jvm?
+public class Data implements java.io.Serializable {
+  public static String f1;
+  public static transient int f2;
+  public transient boolean f3;
+  public final static String f4 = "4";
+  public String f5 = "5";
+}
+
+Data d = new Data();
+d.f1 ="f1";d.f2 =2;d.f3 =true;
+
+transient and static are never serialized, they are ignored
+marking them as both is redundant but not wrong
+f4 is initialized at startup, so it will retain that value
+f5 is the only value seeri+deseri
+
+so f4 and f5 will retain their value
+
+So in short can it be said that, since f1, f2 and f4 are static, their values 
+will be maintained after de-serialization only if performed in the same JVM, and
+if de-serialized in another JVM, the values of f1,f2,f3 will be lost and only f4
+will be maintained because of class initialization? Please verify.
+
+Correct.
+
+
+*********************************************************************************
+THREADS & CONCURRENCY
+*********************************************************************************
+
+Q: What interface can a class implement so that it can be executed in a separate 
+thread?
+
+Runnable
+
+class MyRunnable implements Runnable { public void run() { //other valid code. }}
+Thread t = new Thread(new MyRunnable());
+t.start();
+
+Q: What is the name of the method that threads can use to pause their execution 
+until signaled by another thread to continue ?
+
+wait()
+
+How can you resume the Thread?
+
+resume()
+
+Q: Difference Runnable/Callable with starting in seperate Thread:
+
+Thread is the class that starts new Threads with start
+Runnable is the interface that defines work with run
+Thread only works with Runnable not Callable
+
+Q: There are two ways to create a thread:  
+
+1. new MyClassThatExtendsThread().start(); 
+//Here MyClassThatExtendsThread should extend Thread and override the run method.  
+2. new Thread( new MyClassThatImplementsRunnable() ).start(); 
+// MyClassThatImplementsRunnable should implement the interface Runnable.
+
+Q: Making a synchronized method recursive will cause a deadlock?
+
+A thread is allowed to reacquire a lock that it already has. So there will not be 
+a deadlock if a method calls itself.
+
+Q: A synchronized method cannot call another synchronized method in its body?
+
+yes it can
+
+Q: 
+public class TestClass implements Runnable {
+   int x = 0, y = 0;    
+   public void run() { while(true) {
+      synchronized(this) { x++; y++; System.out.println(" x = "+x+" , y = "+y); }
+   }}
+   public static void main(String[] args)    {
+      TestClass tc = new TestClass();       
+      new Thread(tc).start();       
+      new Thread(tc).start(); }}
+1 object, 2 threads (3 actually)
+access to x and y is in sync block, so how will the values add up?
+
+only 1 thread can access sync block at a time, but each thread that has access
+increments x and y by 1 and prints it and then releases the lock again for the next
+
+Q: For what time period does a Thread own a lock?
+
+exclusively between acquire and release
+
+Q: sync and static sync are on
+
+instance objects or the class
+
+Q: A Thread will temp release the lock if it calls a non-synced method?
+
+No! It keeps the lock until its done with the synced method.
+
+Q: java prevents deadlocks by allowing only 1 object per thread?
+
+No! You can have nested locks on objects and only the programmer can prevent DLs
+synchronized(obj1) { synchronized(obj2) { 
+   //here the thread has locks of obj1 as well as obj2 } }
+
+Q: what is Thrashing next to Livelock, Deadlock and Starvation?
+
+Thrashing is 
+
+excessive context switching, leaving no time for execution.
+
+Starvation is 
+
+greedy threads not allowing other threads to execute.
+
+Deadlock is 
+
+2 threads waiting on each other forever.
+
+Livelock is 
+
+2 threads constantly switching out resources but never getting both.
+
+Q: When are objects of a class thread-safe?
+Is making the object final enough?
+
+No, final means reference cannot change, but object can still be modified by
+multiple threads in a non-threadsafe manner.
+
+What if you dont allow operations on the object?
+
+Then it is thread-safe! If you only return it but not allow modification, then
+two threads can never mess each other up.
+If this class were doing some operation on the instance variables, then it would 
+not thread safe. For example: 
+public void modify() { i = 20; j = 30; }
+
+Q: ExecutorService interface extends Executor interface. 
+While Executor allows you to execute a 
+
+Runnable, ExecutorService allows you to execute a 
+
+Callable.
+
+Q: two threads operate on a CopyOnWriteArrayList, what happens?
+public void addData(List<String> list){ cal.addAll(list); }
+public Iterator getIterator(){ return cal.iterator(); }
+
+A1: The call to addAll may be blocked while the other thread is iterating through 
+the iterator?
+
+No calls will not be blocked, this is not a synced class or anything.
+
+A2: The thread iterating through the Iterator will get a 
+ConcurrentModificationException.
+
+No, this is the reason this class exists! It uses a copy to iterate over.
+
+Can other classes also use the iterator while its iterating?
+
+No, you get UnsupportedOperationException.
+
+A3: Elements added by the addAll method will automatically be visible through the
+iterator in the other thread.
+
+No, only if addAll is finished before the iterator is acquired will addAll stuff
+be visible.
+
+Q: is the fork/join framework created for cpu or I/O tasks?
+
+CPU! Waiting on I/O events actually kills the performance.
+
+Q: how many Threads does fork/join create?
+
+depends on how it is created, by default it uses # of processors
+
+Q: A ForkJoinPool differs from other kinds of ExecutorService mainly by virtue of 
+employing work-stealing?
+
+yeah, in fork/join threads can spawn new tasks and any thread can pick those up
+
+Q: Problem if run from the command line?
+class MyThread extends Thread { int i = 0; public void run() { while(true) 
+   { if( i%2 == 0 ) System.out.println("Hello World"); }}}
+
+A: Well, what do you need to run from the command line?
+
+A main() method.....
+
+So what will happen?
+
+It will compile(!) but when run, you get an
+
+exception at runtime, namely Error
+
+But an Error is not an Exception?
+
+True, but exception is common term for all runtime Exceptions/Errors
+
+Q: real brainer: what will ai value be?
+AtomicInteger ai = new AtomicInteger(); 
+Stream<String> stream = Stream.of("old", "king", "cole", "was", "a", "merry", 
+"old", "soul").parallel(); 
+stream.filter(e->{
+ai.incrementAndGet(); return e.contains("o"); 
+}).allMatch(x->x.indexOf("o")>0);
+
+Will ai always be 8?
+
+No, # of parallel operations depends on system. 
+Each operation will end the stream. Why?
+
+Allmatch will fail and short-circuit the stream.
+
+What is a short-circuit operation? 
+
+One that will kill an infinite stream
+like findAny, allmatch, limit
+
+Q: is t2.setPriority(Thread.MAX_PRIORITY); proper syntax?
+
+yes! setting prorities is bad though since outcome is undeterminable
+
+Q: You can add null elements in CopyOnWriteArrayList (as well as in a regular 
+ArrayList).  Remember that HashMap supports adding null key as well as null 
+values but ConcurrentHashMap does not. 
+Some candidates have reported getting a question on this aspect of 
+ConcurrentHashMap.
+
+Q: does Thread have a no args constructor?
+
+yes, public Thread() { blablabla }
+
+Q: exception during synced method means lock gets released?
+
+yes! does this also count for Lock interface?
+
+no! Locks need to be unlocked() by the programmer
+
+Q: A thread dies when the run( ) method ends?
+
+true!
+
+Q: what does the Thread constructor do?
+
+only creats a new thread which can be started with start()
+
+
+Q: how does count++ work exactly?
+It has 3 steps:
+1 get current value of count in cache
+2 increment cache value
+3 update count with updated cache value
+Why is this important?
+Because of thread-safety, multiple threads get overwrite each other each step 
+
+Q: how to stop a new infinitely running thread from hanging your program:
+
+with .setDaemon(true) because daemon threads alone dont prevent jvm exiting
+
+Q: The synchronized keyword can be applied to -
+
+any NON-ABSTRACT instance method of a CLASS
+You cannot apply sync to interface methods.
+
+Q: will this work?
+public class Test extends Thread { 
+   static int x, y; 
+   public synchronized void run(){  
+      for(;;){ x++; y++; System.out.println(x+" "+y);} } 
+   public static void main(String[] args) { 
+      new Test().start(); 
+      new Test().start();
+}}
+
+two threads but run is synchronized, should be fine right?
+
+wrong, synchronizing on run() doesnt  do anything since both threads will run it
+regardless.
+
+Q: Lock shit
+From a ReadWriteLock, you can get one read lock (by calling lock.readLock() ) and one write lock (by calling lock.writeLock() ). Even if you call these methods multiple times, the same lock is returned. A read lock can be locked by multiple threads simultaneously (by calling lock.readLock().lock() ), if the write lock is free. If the write lock is not free, a read lock cannot be locked. The write lock can be locked (by calling lock.writeLock().lock() ) only by only one thread and only when no thread already has a read lock or the write lock. In other words, if one thread is reading, other threads can read, but no thread can write. If one thread is writing, no other thread can read or write.  Methods that do not modify the collection (i.e. the threads that just "read" a collection) should acquire a read lock and threads that modify a collection should acquire a write lock.  The benefit of this approach is that multiple reader threads can run without blocking if the write lock is free. This increases performance for read only operations.
+
+
+lock.writeLock().lock(); and lock.writeLock().unlock();
+
+Q: synchronized, volatile and atomic
+
+Making the threadcounter variable volatile can only make sure that updates made 
+by one thread will be visible to another thread. But it still cannot guarantee 
+that updates to it will not be lost because the increment operator is not atomic.
+
+Q: Remember that Future.get() will block until there is a value to return or 
+there is an exception.
+
+
+
+
+*********************************************************************************
+STREAM API
+*********************************************************************************
+Q: stream.sorted(Comparator) can be implemented with compareTo()?
+
+yes! apparently ...
+.sorted((a, b)->a.getId().compareTo(b.getId()))  is fine
+
+Q: Method reference: will this work?
+public void printNames() { System.out.println(getList()); }
+n.getList().forEach(Names::printNames); //getList returns a List<String>
+
+Compare the Consumer and printNames method signatures to find the error:
+    void accept    (T)     VS
+    void printNames( ) 
+So how can java use context to use printNames()? 
+
+It cant! It will not compile because the method reference cannot be resolved.
+
+Alternative syntax to visualise:
+Iterator it = list.iterator(); 
+while(it.hasNext()){ 
+   Names.printNames(it.next()); //calling printNames with an argument here
+} 
+//This will not compile because printNames method does not take any argument. 
+
+Q: What will it print?
+List<String> vals = Arrays.asList("a", "b"); 
+String join = vals.parallelStream().reduce("_", (a, b)->a.concat(b));
+System.out.println(join);
+
+A: it can print _ab or _a_b but never b before a because parallel reduction
+does the reductions parallel but joins them in the same order 
+
+Q: What does OptionalDouble.of(2.0) print in sout?
+
+OptionalDouble's toString method returns a String of the form 
+OptionalDouble[<double value>]. 
+Therefore, the given code prints OptionalDouble[2.0] and not 2.0
+
+what if you place the Optional in an Object?
+
+It still prints OptionalDouble[2.0] !!
+
+Q: what to look out for when getting OptionalDouble for averages:
+double averagePrice = books.stream().filter(b->b.getPrice()>10)
+   .mapToDouble(b->b.getPrice()).average().getAsDouble();
+
+If there are no values, it will return OptionalDouble.empty();
+If you use getAsDouble<Optional.empty(), what will happen?
+
+NoSuchElementException
+
+Better would be to use .orElse(0.0)
+
+Q: what happens if you use a larger buffer than actual read returns?
+
+No problem, not an exception!
+1. InputStream.read() fills the buffer with the bytes actually read. 
+So even if the buffer is larger than the available number of bytes, 
+it is not a cause for any exception. 
+2. When you create a FileOutputStream without specifying the append mode 
+(which can be true or false), it overwrites the existing file.
+
+Q: which item will stream().sequential().findAny(); find?
+
+ANY ITEM since findAny is deliberately non-deterministic..
+
+Q: lines() method and Files and BufferedReader
+
+The lines() method has been added to java.io.BufferedReader in Java 1.8. 
+It returns Stream<String>.
+
+lines from Files requires a 
+
+Path instance, not a String.
+
+Q: groupingBy exercise
+public class Course {
+    private String id;
+    private String category;
+
+    public Course(String id, String category) {
+        this.id = id;
+        this.category = category;
+    }
+
+    public String toString() {
+        return id + " " + category;
+    }
+
+    public static void main(String[] args) {
+
+        List<Course> s1 = Arrays.asList(
+                new Course("OCAJP", "Java"),
+                new Course("OCPJP", "Java"),
+                new Course("OCEJPA", "Java"),
+                new Course("C#", "C#"));
+
+        System.out.println(s1.stream().collect(
+            Collectors.groupingBy(c -> c.getCategory())));
+
+        // output = Map<K, List<Course>> meaning:
+
+        {C#=[C# C#], Java=[OCAJP Java, OCPJP Java, OCEJPA Java]}
+
+        // why is [C# C#] printed as value? Because the map Value is List<Course> 
+        and Course toString is "id category"
+
+        s1.stream().collect(Collectors.groupingBy
+         (c -> c.getCategory())).forEach((m, n) -> System.out.println(n));
+        // output = [C# C#]
+        //          [OCAJP Java, OCPJP Java, OCEJPA Java]
+    }
+
+Q: groupingBy exercise
+List<String> names = Arrays.asList("greg", "dave", "don", "ed", "fred" ); 
+Map<Integer, Long> data = names.stream().collect(Collectors.groupingBy(
+   String::length,                              
+   Collectors.counting())); 
+System.out.println(data.values());
+
+Group by length of Strings -> {2= ,3= ,4= }
+Collectors.counting() counts the number of elements that fit the keys, so you get
+{2=1,3=1,4=3}
+
+What are we printing? values(), so what is the answer?
+
+[1,1,3]
+
+Q: groupingBy exercise
+public String toString(){ return name+":"+marks; }
+List<Student> ls = Arrays.asList(
+      new Student("S1", 20), 
+      new Student("S3", 30), 
+      new Student("S3", 20) ); 
+//INSERT CODE HERE TO PRINT {20=[S1:20, S3:20], 30=[S3:30]}
+System.out.println(grouping);
+
+How to make the stream.collect()?
+
+What is the syntax to print? {20=[S1:20, S3:20], 30=[S3:30]}
+meaning groupingBy marks and after mark you want the key-value pair printed
+what is the toString? name:mark so you dont have to change that, just print
+What does groupingBy return? Map<K,List<T>>
+For this question that becomes Map<Integer,List<Student>>
+Key is the Integer mark 20 and 30 and the value becomes an array of Students
+which print their name:mark pair.
+So all you have to do is call groupingBy(s->s.getMarks) and you get 
+{20=[S1:20, S3:20], 30=[S3:30]}
+
+Q: consider this code
+books.stream().sorted(c1.thenComparing(Book::getTitle)); //2 
+System.out.println(books);
+
+Does the stream affect the sout of the books/
+
+No! streams dont change the original list if you dont capture the result back
+
+Q: Is this code valid?
+Object obj = values.collect(Collectors.partitioningBy(x->x%2==0));
+
+partitioningBy() returns a Map<Boolean, List<T>>, can you place that in Object?
+
+Yes! But probably useless but it will compile and run.
+
+Q: given: 
+List<String> l1 = Arrays.asList("a", "b");
+List<String> l2 = Arrays.asList("1", "2");
+Will this compile and run?
+Stream.of(l1, l2).forEach((x)->System.out.println(x));
+
+Yes, it will print 
+[a,b]
+[1,2]
+Stream.of(l1, l2).flatMap((x)->Stream.of(x)).forEach((x)->System.out.println(x));
+[a,b]
+[1,2]
+why same thing? flatMap(x) returns a Stream.of(x) which is the same thing you
+started with...
+Stream.of(l1, l2).flatMap((x)->x.iterator()).forEach((x)->System.out.println(x));
+Easy!
+
+Does not compile, because iterator returns an Iterator and not a stream...
+
+Q: is this correct code?
+strm1.collect(Collectors.partitioningBy(i->{ return i>5 && i<15; }))
+            .get("true").stream();
+
+Actually it is correct code! partitioningBy() returns a Map<Boolean,List<T>>
+You can call get(true) on that map and get the List<T> as result.
+You can then stream() that List. 
+But you need to call true and not "true" ...
+
+Q: what will mapping(Book::getAuthor, Collectors.toList() return?
+
+List<String>
+
+Q: can you change an Optional value after it has been set?
+Optional<String> grade = Optional.empty();
+grade = Optional.of("PASS");
+grade.of("FAIL");
+
+No! You cannot change the contents of Optional object after creation. 
+Optional does not have a set method. Therefore, grade.of, although technically 
+correct, will not actually change the Optional object referred to by grade. 
+It will return a new Optional object containing the passed argument which you 
+need to capture.
+
+Q: will this compile? getPrice returns a double
+.mapToInt(b->b.getPrice())
+
+no, will not compile because you need a cast from double to int
+
+Q: consider:
+1 Optional<Double> price = Optional.of(methodThatThrowsNull())
+2 Optional<Double> price = Optional.ofNullable(methodThatThrowsNull())
+  Double x = price.orElse(getPrice("2222"));
+
+1 will it throw a npe?
+
+yes!~ creating an Optional with a null value throws npe
+
+2 will 2 throw an npe?
+
+no, why?
+
+Optional.ofNullable will create an empty Optional
+x gets assigned the return value of getPrice because orElse skips the empty Opt
+Double will get a value null which is fine! Just dont use x :)
+
+Q: flatMap explanation
+1. The flatMap method replaces one element of a stream with elements of a new 
+stream generated using the original element. Here, the original elements are the 
+sentences. Each of these elements are replaced in the stream with the elements 
+generated by applying str.split("[ ,.!?\r\n]", which basically converts the 
+stream of sentences into a stream of words.
+The map method is meant to replace one element of stream with another. While the 
+flatMap method replaces one element of a stream with elements of a new stream 
+generated using the original element. Therefore, map is not useful here.
+
+Q: problem?
+s = Files.list(Paths.get("c:\\temp\\pathtest\\**\\test.txt"));
+
+will throw java.nio.file.InvalidPathException because of the **
+
+
+
+*********************************************************************************
+LAMBDAS AND FUNCTIONAL INTERFACES
+*********************************************************************************
+Q: do the primitive specialized functional interfaces extend the non-prim ones?
+
+No, they do not extend the non-primitive functional interfaces
+
+Q: what do IntFunction etc takes as argument and what do they return? 
+
+They take the primitive of their name and return anything you want in <>
+
+in other words:
+
+parameter type can not be parameterized but the return type can be 
+
+Q: why use primitive streams + functions over their wrapped versions?
+
+because with IntStream(IntFunction) you do not need boxing! = less costs
+with Stream<Integer> you do need boxing if you want primitive operations
+so skip the boxing altogether by using specialized primitive versions
+
+Q: what will happen here?
+Book b1 = new Book("Java in 24 hrs", null); 
+DoubleSupplier ds1 = b1::getPrice; 
+System.out.println(b1.getTitle()+" "+ds1.getAsDouble());
+
+DoubleSupplier -> double getAsDouble(T)
+T=null
+What happens if you try to unbox null to a double?
+
+nullpointerexception!
+
+Q: can you pass Integer::max to stream().max(Comparator)
+
+Yes, the Stream.max method requires a Comparator. 
+All you need to implement this interface using a lambda expression is a 
+
+reference to any method that takes two arguments and returns an int. 
+
+The name of the method doesn't matter. That is why it is possible to pass the 
+reference of Integer's max method as an argument to Stream's max method.
+
+But will it work?
+
+No, Integer.max compares two numbers are returns the higher one.
+Stream.max returns difference between two numbers so you end up with max of a
+series of numbers.
+
+Q: can you re-use x between different lambdas?
+
+Yes!
+
+Q: will this work?
+Function<String, Integer> f = x->x.length();
+
+Yes! What if you make both String?
+
+No compile, java looks at the return of length() and thats not a String.
+
+Q: complex code Carnivore = interface with a SAM int eat(List<String>)  
+t= Tiger instance implements Carnivore
+answers:
+process(fnames, t::eat); 
+process(fnames, t::calories);
+process(fnames, TestClass::size);
+process(fnames, Carnivore::calories); 
+process(fnames, Tiger::eat);
+
+explain them:
+t::eat > call eat method on t object, Tiger inherits Carnivore int eat(List<S>)
+t::calories > call calories method from Carnivore on t object
+TestClass::size > call size method from TestClass which is a static method
+bad:
+Carnivore::calories > Carnivore is an interface, you cant call a method on an
+interface
+Tiger::eat > this is another static method decl on Tiger class, but Tiger has 
+no static eat() method, its non-static
+
+Q: more method references
+To anyone looking at this thread, user admin's excellent explanations and 
+this example clarified it perfectly for me:
+
+This is what Java does in the background, you can replace
+studentList.stream().forEach(Student::debug);
+
+with this, these are exactly the same:
+studentList.stream().forEach( new Consumer<Student>() {
+@Override
+public void accept(Student student) {
+student.debug();
+}
+});
+
+Also it was important to understand that there are 4 (very) different method 
+references:
+1) Static methods
+2) Instance methods on a particular instance
+3) On an instance determined at runtime
+4) Constructors
+
+Student::debug is the 3rd in this list.
+
+Q: Can you pass arguments while using method references?
+
+NO YOU CAN NEVER PASS ARGUMENTS WHILE REFERRING TO A CONSTRUCTOR OR A METHOD.
+DOES NOT COMPILE!!!!!!!!!!!!!!!!!!
+
+Q: consider these constructor references, which will work and when/why?
+Supplier<MyProcessor> supp = MyProcessor::new;
+Function<Integer, MyProcessor> f = MyProcessor::new;
+
+Both will work if:
+- the supplier one has a no-arg constructor T get() -> Class()
+- the function one has a 1-arg constructor R apply(T) -> Class(T)
+
+Q: Problem?
+HashMap<Integer, String> hm = new HashMap<>(); 
+hm.put(1, "a"); hm.put(2, "b"); hm.put(3, "c");
+m.forEach(System.out::println);
+
+yes! map forEach takes a ?
+
+BiConsumer
+
+System.out.println takes ?
+
+1 args :(
+
+Should be hm.forEach((key, value)->System.out.printf("%d %s ", key, value));
+which is fine, printf() exists
+
+*********************************************************************************
+COLLECTIONS
+*********************************************************************************
+Q: does HashMap allow null keys and values?
+
+yes! nullMap.put(null,null); is fine
+
+Q: does ConcurrentHashMap allow null keys and values?
+
+no, neither, what happens then?
+
+will throw nullpointerexception
+
+Q: how can container be declared?
+public synchronized Request getRequestToProcess() { return container.poll(); }
+1 Queue<Request> container = new LinkedList<Request>(); 
+2 LinkedList container = new LinkedList(); 
+3 Queue container = new PriorityQueue(); 
+4 Queue<Request> container = new Queue<Request>();
+5 List al = new ArrayList();
+
+return type is Request and there is no (cast) involved so its not Object
+no Object means 2 and 3 are out
+Queue is an interface you cant instantiate, so 4 is out
+it needs to use the poll() method which returns an Element with no cast
+so declaration needs to be a queue type with a generic so 5 is out
+
+1 Queue<Request> container = new LinkedList<Request>();
+
+Q: what does subList() do?
+
+Method in List, returns a view backed by the original list.
+If you change the sublist, it will be visible in the original list
+
+Q: which are valid lines of code?
+I   java.util.Collections.sort(al, (p1, p2)->p1.dob.compareTo(p2.dob));          
+II  java.util.Collections.sort(al, SortTest::diff);  
+III java.util.Collections.sort(al, new MySorter()::compare);          
+IV  java.util.Arrays.sort(al, SortTest::diff); 
+
+Not IV because Arrays.sort takes [] as parameter
+I,II,III are all fine!
+
+Q: what happens with Stream.sorted() with non-Comparable objects?
+
+Not a compiler error, a classcastexception at runtime. Just like TreeMap/Set
+Only Collections.sort() throws compiler error on non-Comparable items
+
+Q: what is type inference and good and bad example
+Given: Map<String , List<? extends CharSequence>> stateCitiesMap = 
+new HashMap<String, List<? extends CharSequence>>();
+
+Good example:
+Map<String , List<? extends CharSequence>> stateCitiesMap = new HashMap<>();
+Bad example:
+Map<String , List<? extends CharSequence>> stateCitiesMap = new HashMap();
+
+Is the second one valid and if not, Why is it bad? 
+
+It is valid code! But will give a compiler warning ...
+
+Also, new HashMap<String, List<>>(); problem?
+
+Yes, never put <> inside anything else or no compile
+
+Q: List<Book> books; and Collections.sort(books);
+Book does not implement Comparable, what happens?
+
+Compiler error, because sees this.
+
+What happens if you turn it into List books; ?
+
+No comiler error, because java does not see this. 
+
+But 
+
+ClassCastException at runtime!
+
+Q: what happens with a collection if you add <?> or <? extends X> to a generic?
+
+The collection becomes logically immutable, meaning you cant add or remove things
+
+Does this also apply to Map?
+
+yes!! 
+Map<Object, ?> m = new LinkedHashMap<Object, Object>();
+is fine code but you cannot use m.put(), it will not compile!
+
+import java.util.*; 
+public class TestClass {     
+   public static void main(String[] args)     {       
+      // put declaration here        
+      m.put("1", new ArrayList());    //1       
+      m.put(1, new Object());    //2       
+      m.put(1.0, "Hello");     //3       
+      System.out.println(m);     } }
+
+Map m = new TreeMap(); ?
+
+Will compile, but exception at runtime. Why?
+
+TreeMap keys need to be sorted based on Comparable. You cannot compare different
+types like String Integer Double.
+
+Map<Object, Object> m = new TreeMap<Object, Object>(); ? 
+
+Again, a TreeMap so exception at runtime.
+
+Map<Object, ?> m = new LinkedHashMap<Object, Object>(); ? 
+
+Good declaration but you cannot add anything, so m.put() will not compile.
+
+Map<Object, ? super ArrayList> m = new LinkedHashMap<Object, ArrayList>(); ?
+
+Good declaration and you can use m.put() since lower bounded, but you have to 
+comment out lines 2 and 3 for it to work.
+Why do you have to comment out 2 and 3? Why cant you m.put(1, new Object())?
+
+Because jvm knows the type is ArrayList (or a subclass) and Object is a superclass
+and jvm does not know in advance exactly which superclass it will be.
+
+Map m = new HashMap(); ?
+
+This is fine!
+
+Q: do OrderedSet and OrderedList exist?
+
+no, fake
+
+Q: hierarchy of TreeSet?
+
+Set > SortedSet > NavigableSet > TreeSet
+
+Q: what does a NavigableSet add to SortedSet?
+
+navigable methods for search targets like:
+
+lower, floor, ceiling, higher which return highest value or null if none
+
+The following are the descriptions of the methods.
+
+ E ceiling(E e) 
+          Returns the least element in this set greater than or equal to the 
+          given element, or null if there is no such element. 
+ E floor(E e) 
+          Returns the greatest element in this set less than or equal to the 
+          given element, or null if there is no such element. 
+ E higher(E e) 
+          Returns the least element in this set strictly greater than the given 
+          element, or null if there is no such element. 
+ E lower(E e) 
+          Returns the greatest element in this set strictly less than the given 
+          element, or null if there is no such element. 
+
+
+Note that methods of NavigableMap (such as ceilingEntry(), ceilingKey(), 
+floorEntry(), floorKey() etc.) also work exactly the same way.
+
+
+
+
+*********************************************************************************
+EQUALS / HASHCODE / TOSTRING
+*********************************************************************************
+Q: equals()
+
+It is reflexive: 
+
+for any reference value x, x.equals(x) should return true.
+
+It is symmetric: 
+
+for any reference values x and y, x.equals(y) should return true if and only if 
+y.equals(x) returns true.
+
+It is transitive: 
+
+for any reference values x, y, and z, if x.equals(y) returns true and y.equals(z) 
+returns true, then x.equals(z) should return true.
+
+It is consistent: 
+
+for any reference values x and y, multiple invocations of x.equals(y) consistently
+return true or consistently return false, provided no information used in equals
+comparisons on the object is modified.
+
+For any non-null reference value x, x.equals(null) should return 
+
+false.
+
+The equals method for class Object implements the most discriminating possible
+equivalence relation on objects; that is, for any reference values x and y, this 
+method returns true if and only if 
+
+x and y refer to the same object (x==y has the value true).
+
+Note that it is generally necessary to override the hashCode method whenever this 
+method is overridden, so as to maintain the general contract for the hashCode 
+method, which states that equal objects 
+
+must have equal hash codes.
+
+Q: why is hashCode important for map.get(Object) if you dont override it
+
+HashCode determines in which bucket you place your pair.
+If a pair exists, it will update the value.
+HashCode determines in which bucket to look for a pair. 
+If the HashCode is not implemented properly to be aligned with equals,
+you will never find your item even though both items are equal. Because java
+will not even look in the right bucket!
+
+EXAMPLE CODE:
+import java.util.*; class Book {     
+   private String title, isbn;     
+   public boolean equals(Object o){                
+      return (o instanceof Book && ((Book)o).isbn.equals(this.isbn));     
+   }      
+   // ... setters and getters for title and isbn }  
+class BookStore {     
+   Map<Book, Integer> map = new HashMap<Book, Integer>();         
+   int getNumberOfCopies(Book b){ return map.get(b); }     
+   public void addBook(Book b, int numberofcopies){ 
+      map.put(b, numberofcopies);     
+   }
+   // ... other useful methods. }  
+public class TestClass {       
+   static BookStore bs = new BookStore();      
+   public static void main(String[] args)   {     
+   Book b = new Book(); b.setIsbn("111"); bs.addBook(b, 10);  //1
+   System.out.println(bs.getNumberOfCopies(b));          
+   b = new Book(); b.setIsbn("111");     //2
+   System.out.println(bs.getNumberOfCopies(b));   } }
+
+What is the initial problem? 
+
+Equals is overridden but hashcode is not.
+So 2 objects can be equal but might not be found at all.
+
+What will happen? 
+
+//1 creates a Book with 111 isbn and adds it to the Bookstore
+its one object so equals and hashcode will be the same in this case
+
+//2 uses b to point to a new Book with isbn 111
+new Book means new HashCode
+
+So when you look for the Book again, even though equals would be true the
+Book will never be found since the hashcodes are not the same anymore!
+
+If the Book is not found, return map.get(b); will be null 
+and int getNumberOfCopies(Book b) will unbox null so exception...
+
+*********************************************************************************
+Date/Time API
+*********************************************************************************
+
+Q: Which of the following classes are thread safe?
+
+everything in java.time is immutable
+
+Q: how do Period.between() and Duration.between() work?
+
+if the second dat is before the first data a minus symbol is inserted
+Period p = Period.between(LocalDate.of(2015, Month.SEPTEMBER, 2, 
+                          LocalDate.of(2015, Month.SEPTEMBER, 1));
+Period = P-1D
+
+Q: Difference between Period and Duration with DST?
+
+Period will add a conceptual day and maintain local time: 10 becomes 9 with DST
+Duration only works on time so adds literal 24 hours to your time: 10 stays 10 
+even though with DST it means 25 hours have passed.
+
+Q: 
+Instant start = Instant.parse("2015-06-25T16:13:30.00z"); 
+start.plus(10,ChronoUnit.HOURS); System.out.println(start);
+Duration timeToCook = Duration.ofHours(1);
+Instant readyTime = start.plus(timeToCook); System.out.println(readyTime);
+LocalDateTime ltd = LocalDateTime.ofInstant(readyTime, ZoneId.of("GMT+2")); 
+System.out.println(ltd);
+
+> is this Instant made correctly?
+
+yes! will parse to 2015-06-25T16:13:30Z !!!!!!!!!!!!!!!
+
+> will the plus() method work?
+
+yes but no, instant is immutable so capture the result or bust
+
+> Does an instant work with time and/or date?
+
+only time, epoch time in millis since 1 jan 1970, no dates!
+
+> can you create a localdatetime from an instant?
+
+yes, but only if you supply the timezone for the ldt
+
+Q: Given that daylight Savings Time ends on Nov 1 at 2 AM in US/Eastern time 
+zone. (As a result, 2 AM becomes 1 AM.), what will the following code print?
+
+LocalDateTime ld1 = LocalDateTime.of(2015, Month.NOVEMBER, 1, 2, 0); 
+ZonedDateTime zd1 = ZonedDateTime.of(ld1, ZoneId.of("US/Eastern")); 
+LocalDateTime ld2 = LocalDateTime.of(2015, Month.NOVEMBER, 1, 1, 0); 
+ZonedDateTime zd2 = ZonedDateTime.of(ld2, ZoneId.of("US/Eastern")); 
+long x = ChronoUnit.HOURS.between(zd1, zd2); 
+System.out.println(x);
+
+you go from 2015-11-01 2AM to 1AM
+reverse it to go from 1AM to 2AM, that is +1 hour
+but then DST kicks in and sets time back to 1AM
+so you need to add another hour to get to 2AM, totals 2 hours
+since you have to calculate back in time, it becomes -2 hours
+
+
+
+*********************************************************************************
+GENERICS
+*********************************************************************************
+> Generics must match exactly when adding:
+adding Map<String, ArrayList<string>> to Map<String, List<String>> is no compile
+
+Q: Can a diamond operator be embedded in a generics declaration? <String, List<>> ?
+
+No! diamond is solo 
+
+Q: will this work and why/why not?
+String[] p = {"1", "2", "3" };
+List<?> list2 = new ArrayList<>(Arrays.asList(p));
+
+It will work, because Arrays.asList(T[]) retuns a List<T>
+In the case of String[] p it will return a List<String>
+list2 is declared to be a List of anything, so a List<String> will work!
+
+can you add stuff though?
+
+no, its a unbounded list so logically immutable
+
+can you add null?
+
+yes, adding null always works
+
+*********************************************************************************
+ASSERTIONS
+*********************************************************************************
+Q: 'is this assertion appropriate' type of questions
+
+check if there is an assumptions about data that you can assert
+and ofcourse check if the syntax is correct
+
+Assertions can be enabled or disabled for specific packages or classes. 
+To specify a class, use the class name. 
+To specify a package, use the package name followed by "..." : 
+java -ea:<class> myPackage.MyProgram 
+java -da:<package>... myPackage.MyProgram  
+
+Each enable or disable modifies the one before it. 
+This allows you to enable assertions in general, 
+but disable them in a package and its subpackages: 
+java -ea -da:<package>... myPackage.myProgram  
+
+To enable assertion for one package and disable for other you can use: 
+java -ea:<package1>... -da:<package2>... myPackage.MyProgram  
+
+You can enable or disable assertions in the unnamed root (default)package 
+(the one in the current directory) using the following commands: 
+java -ea:... myPackage.myProgram 
+java -da:... myPackage.myProgram  
+
+Note that when you use a package name in the ea or da flag, 
+the flag applies to that package as well as its subpackages. 
+For example, java -ea:com... -da:com.enthuware... com.enthuware.Main 
+The above command first enables assertions for all the classes in com as well as 
+for the classes in the subpackages of com. It then disables assertions for classes
+in package com.enthuware and its subpackages.
+
+Q: since when became assert a keyword?
+
+java 1.4
+
+Q: what is an identifier? 
+
+a method name
+
+Q: Since when can you no longer use assert as an identier?
+
+since 1.4 but you can compile using 1.3 and still use it that way ...
+
+Q: assert obj != null : throw new AssertionError();
+
+the assert check is the first operand which must return boolean
+the second operand is optional after the :
+the second operand must be a 
+
+object or primitive or null, throwing an error is neither
+
+these are all good:
+assert obj != null : 10; //second operand is an int primitive
+assert obj != null : null; //second operand is null
+assert obj != null : "string"; //second operand is a String object
+assert obj != null : new Student(); //second operand is a Student object
+
+Q: Input params of a public method should be validated using assertions?
+
+no
+
+Q: Input params of a private method can be validated using assertions?
+
+yes
+
+Q: Assertions should not have side effects?
+
+true
+
+Q: Post conditions for all methods can be ensured using assertions?
+
+true
+
+Q: is this ok> assert v.size() == 10 : v.clear();
+
+no, Invalid because List.clear() returns void and boolean : void does not satisfy 
+
+<BOOLEAN_EXPRESSION> : <ANY_EXPRESSION_BUT_VOID> < THIS ALL YOU NEED FOR ASSERT
+
+, which is required for an assert statement.
+
+Q: assert enabled = true; problem?
+
+no, this is correct boolean expression
+
+
+
+*********************************************************************************
+ENUMS
+*********************************************************************************
+
+You need to know the following facts about enums: 
+
+1. Enum constructor is 
+
+always private. If an enum type has no constructor declarations, then 
+
+a private constructor that takes no parameters is automatically provided. 
+
+2. An enum is implicitly 
+
+final, which means you cannot extend it. 
+
+3. You can/cannot extend an enum from another enum or class 
+
+cannot : because an enum implicitly extends java.lang.Enum. But an enum can 
+
+implement interfaces. 
+
+4. Since enum maintains exactly one instance of its constants, you cannot 
+
+clone it. You cannot even override the clone method in an enum because 
+
+java.lang.Enum makes it final. [enum extends java.lang.Enum > final clone()]
+
+5. Compiler provides an enum with two public static methods automatically 
+
+values() and valueOf(String). The values method returns 
+
+an array of its constants and valueOf method tries to 
+
+match the String argument exactly (i.e. case sensitive) with an enum constant 
+
+and returns that constant if successful otherwise it throws 
+java.lang.IllegalArgumentException.  
+
+The following are a few more important facts about java.lang.Enum which you 
+should know:  
+
+1. It implements java.lang.Comparable (thus, an enum can be added to 
+
+sorted collections such as SortedSet, TreeSet, and TreeMap). 
+
+2. It has a method ordinal(), which returns the index (starting with 0) 
+of that constant i.e. the position of that constant in its enum declaration. 
+
+3. It has a method name(), which returns the name of this enum constant, exactly 
+as declared in its enum declaration.
+
+Q: problem?
+public enum Coffee {     
+   ESPRESSO("Very Strong"), MOCHA, LATTE;
+   public String strength;
+   Coffee(String strength) { this.strength = strength;} }
+
+Enum constructors are private or implicitly private.
+This constructor wants a String as parameter. So the values ..
+
+all need to provide Strings .....
+
+Q: Do Enums implement Comparable?
+
+Yes! So in what order are enums printed in a TreeSet?
+
+In their natural order.
+
+What is the natural order of enum?
+
+The order of the list of the enum values .....
+enum drinks { PEPSI, COKE }  = natural order, not necessarily alphabetical
+
+Q: can an enum be created in a method or constructor?
+
+NOOOOOOOOOOOO
+
+Q: Unlike a regular java class, you can/cannot access a non-final static field 
+from an enum's constructor.
+
+cannot
+static String prefix = "I am "; 
+String name;
+Pets(String s) { name = prefix + s;}
+
+does not compile
+
+
+*********************************************************************************
+INTERFACES
+*********************************************************************************
+Q: Problem?
+interface Office { public static String getAddress(){ return "101 Smart Str"; } }
+public class TestClass { 
+   public static void main(String[] args) {     
+      Office off = new HomeOffice();   
+      System.out.println(off.getAddress()); 
+}}
+
+A: off calls getAdress(), does that method exist on Office?
+
+yes, but its a static method, meaning?
+
+you need to call it with interface name, so code does not compile
+
+What if the method in Office was default instead of static?
+
+Then it would be fine! compile + run
+
+Q: Problem?
+// Filename: TestClass.java
+class TestClass implements T1, T2{
+   public void m1(){}
+}
+interface T1{
+   int VALUE = 1;
+   void m1();
+}
+interface T2{
+   int VALUE = 2;
+   void m1();
+}
+
+A: m1() is redefined in TestClass so not ambiguous anymore
+How do you call VALUE in TestClass?
+TestClass t1 = new TestClass();
+t1.VALUE //problem?
+
+ambiguous! it has two VALUE fields to pick from
+
+solution?
+
+cast to the interface you want
+
+((T1)t1).VALUE or ((T2)t1).VALUE
+
+Q: how to call interface methods from subclasses
+interface A {  default void hello() { } }  
+interface B extends A {  default void hello() { 
+   super.hello();  //1
+   A.super.hello();//2 } }  
+public class TestClass implements B {  public void hello() { 
+super.hello();     //3
+A.super.hello();   //4
+B.super.hello();   //5} }
+
+//1 is wrong because you dont call interface method like that 
+//2 is correct because this is how you call interface methods
+//3 same as //1
+//4 WRONG because TestClass does not implement A directly
+//5 this is correct <InterfaceYouImplement>.super.<methodname>
+
+Q: What methods have to be implemented by a class that says it implements I1 I2?
+interface I1 { void m1() throws java.io.IOException; } 
+interface I2 { void m1() throws java.sql.SQLException; }
+
+public void m1() throws Exception?
+
+You can not throw an exception that is new. Exception != IOException/SQLException
+
+public void m1() throws SQLException, IOException?
+
+Sounds like a plan, but its wrong. This declaration throws at least 1 exception
+that is new to either of the interface methods...
+
+The class cannot implement both the interfaces simultaneously as they have 
+conflicting methods?
+
+It can with
+
+public void m1() {} because you dont have throw the checked exceptions again...
+
+TestClass tc = new TestClass();
+     I1 i1 = (I1) tc;
+     i1.m1();
+Is this valid code?
+
+yes! TestClass implements the interfaces so can serve as an object for those
+references. Now m1() is also no longer ambiguous.
+
+
+*********************************************************************************
+JDBC
+*********************************************************************************
+Applications no longer need to explicitly load JDBC drivers using Class.forName().  
+The DriverManager methods 
+
+getConnection and getDrivers 
+
+have been enhanced to support the Java Standard Edition Service Provider 
+mechanism. 
+JDBC 4.0 Drivers must include the file META-INF/services/java.sql.Driver. 
+This file contains the name of the JDBC drivers implementation of java.sql.Driver.
+For example, to load the my.sql.Driver class, 
+the META-INF/services/java.sql.Driver file would contain the entry:  
+my.sql.Driver  
+
+When the method getConnection is called, the DriverManager will attempt to 
+locate a suitable driver from amongst those loaded at initialization and those 
+loaded explicitly using the same classloader as the current applet or application.
+
+There has never been any restriction on how many JDBC Drivers are allowed to be 
+loaded by an application. 
+
+Q: when will changes be committed to the database?
+
+A connection is always in 
+
+auto-commit mode meaning if you do not disable auto-commit, the changes will be
+
+committed right after the statement has finished execution
+
+Q: class that has more info on ResultSet?
+
+ResultSetMetaData gives you the information about the result of executing a query.
+You can retrieve this object by calling getMetaData() on ResultSet.
+ResultSetMetaData contains several methods that tell you about the ResultSet. 
+Some important methods are:
+   getColumnCount(), 
+   getColumnName(int col), 
+   getColumnLabel(int col), and 
+   getColumnType(int col). 
+Remember that the column index starts from 1.
+
+Q: Assuming that CUSTOMER_ORDER table has multiple records and column AMOUNT is 
+of type FLOAT, what will this code print?
+
+Connection c = DriverManager
+   .getConnection("jdbc:derby://localhost:1527/sample", "app", "app");         
+Statement stmt = c.createStatement();         
+ResultSet rs = stmt.executeQuery("select * from CUSTOMER_ORDER");
+stmt.close();
+while(rs.next()){
+System.out.println(rs.getString("AMOUNT"));  
+}         
+c.close();
+
+getString("AMOUNT") while the column is FLOAT, problem?
+
+No! getString will convert the value to a String. No exception
+
+What about getInt() on a VARCHAR field?
+
+if the value cannot be parsed to an int you will get an exception
+
+stmt.close(); what does this do?
+
+remember order of interfaces
+Driver > Connection > Statement > ResultSet
+
+close one, closes the underlying ones as well
+
+So is rs still available?
+
+Q: PreparedStatement offers better performance when the same query is to be run 
+multiple times with different parameter values.
+
+true!
+
+PreparedStatement allows several additional SQL types such as BLOB and CLOB
+
+true!
+
+PreparedStatement offers better performance.
+multiple trips to the database (one to get it pre compiled, and one to execute 
+with the parameters) and also requires multiple method calls to set the 
+parametersmultiple tr
+
+Q: how do AutoCommit rollback and savepoint work
+If autocommit is false, transactions are not committed after being executed.
+If you set it to true, the entire transaction will be committed right away.
+rollback() causes the whole transaction to rollback()
+you can set a savepoint and supply that savepoint to the overloaded 
+rollback(savepoint) method
+
+Q: A java.sql.Statement object ...
+implements a session with the database?
+
+No, thats connection
+
+provides a cursor to fetch data from the database?
+
+No, thats Resultset
+
+provides methods to commit and rollback transactions?
+
+No, thats connection
+
+provides a means to execute queries on the database?
+
+Yes!
+
+Q: if con.setAutoCommit(false) and you want to commit, do:
+
+con.commit(); no args!!!
+
+
+A PreparedStatement is used for SQL statements that are executed multiple times 
+with different values. For example, if you want to insert several values into a 
+table, one after another, it is a lot easier with PreparedStatement: 
+
+ps = c.prepareStatement("INSERT INTO STUDENT VALUES (?, ?)"); 
+//This is created only once 
+//Once created, the PreparedStatement is compiled automatically. 
+ ps.setInt(1, 111); 
+ ps.setString(2, "Bob"); 
+ ps.executeUpdate();  
+ //Now change the parameter values and execute again. 
+ ps.setInt(1, 112); 
+ ps.setString(2, "Cathy"); 
+ ps.executeUpdate();  
+
+ A CallableStatement is meant for executing a stored procedure that has already 
+ been created in the database. For example:  
+ //computeMatrixForSales is a stored procedure that has already been created in
+ the database. 
+ callableStatement = connection.prepareCall("{call computeMatrixForSales(?)});
+ callableStatement.setInt(1, 1000); 
+ callableStatement.executeUpdate();
+
+One advantage of CallableStatement is that it runs on the database.
+
+all queries run on the database
+
+One advantage of CallableStatement is that it uses Java instead of native SQL.
+
+all queries use SQL
+
+One advantage of CallableStatement is that it allows IN/OUT parameters.
+
+true
+
+A CallableStatement is the only way for a JDBC program to execute stored 
+procedures in the database if the procedure has in and out parameters.
+
+true
+
+Q: rollback method:
+connection.setAutoCommit(false); 
+stmt.executeUpdate("update student set status=1"); //1 
+Savepoint savePoint1 = connection.setSavepoint("step1done"); 
+stmt.executeUpdate("update student set gpa=4.0"); //2 
+if(special condition){ 
+   connection.rollback(savePoint1); 
+} 
+connection.commit(); 
+//query 1 will be committed but query 2 will not be committed.
+
+
+Q: 
+Connection c = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app"); 
+try(Statement stmt = c.createStatement();) 
+{     
+stmt.setMaxRows(2);     <------- exists!  
+ResultSet rs = stmt.executeQuery("select id, accnum, name from t_account");     
+while(rs.next()){         
+System.out.println(rs.getString(1));     }  } 
+catch(SQLException e){     
+System.out.println("Exception "); }
+
+1. You should remember that column index starts from 1. Therefore, getString(1)
+ will return the value of the first column i.e. the id column.
+
+2. getString retrieves the value of the designated column in the current row of 
+this ResultSet object as a String. If the value is SQL NULL, the value returned 
+is null.
+
+3. Statment has a setMaxRows method that limits the total number of rows returned 
+by the ResultSet. If the query returns more rows than the limit, the extra rows 
+are silently (i.e. without any exception) are ignored. 
+
+Note that most databases allow limiting the result of a query. For example, MySQL
+ uses LIMIT keyword and Oracle uses ROWNUM. However, the setMaxRows method may 
+ not necessarily use the database specific mechanism. It is possible that a 
+ particular JDBC implementation gets all the rows from the database and then drop 
+ the additional rows from the ResultSet. Therefore, using this method may not 
+ always be an efficient way of limiting the query size.
